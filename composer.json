@@ -1,0 +1,13 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Strike\\": "src/Strike/",
+      "Player\\": "src/Player/",
+      "Skill\\": "src/Skill/",
+      "Match\\": "src/Match/"
+    }
+  },
+  "require": {
+    "symfony/var-dumper": "^3.1"
+  }
+}
