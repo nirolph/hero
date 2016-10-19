@@ -16,6 +16,8 @@ use Player\EntityInterface;
 
 class DefendSkill implements DefenceSkillInterface, BroadcasterAwareInterface
 {
+    const SKILL_NAME = 'DEFEND';
+
     private $defender;
     private $broadcaster;
     private $isEffective = false;
@@ -37,6 +39,16 @@ class DefendSkill implements DefenceSkillInterface, BroadcasterAwareInterface
             $this->defender->getStats()->getHealth(),
             $this->defender->getStats()->getDefence()
         );
+
+        $damage = $strike->getPower() - $this->defender->getStats()->getDefence();
+        $this->getBroadcaster()->broadcast(
+            sprintf(
+                '%s uses %s and takes %s HP in damage!',
+                $this->defender->getName(),
+                self::SKILL_NAME, $damage
+            )
+        );
+
         $this->defender->getStats()->setHealth($newHealth);
     }
 
@@ -53,12 +65,6 @@ class DefendSkill implements DefenceSkillInterface, BroadcasterAwareInterface
     private function calculateHealthAfterStrike($strikePower, $healthPoints, $defencePoints)
     {
         $damage = $strikePower - $defencePoints;
-        if ($this->isEffective) {
-            $this->getBroadcaster()->broadcast(
-                sprintf('%s takes %s HP in damage!', $this->defender->getName(), $damage)
-            );
-            $this->isEffective = false;
-        }
         $newHealth = $healthPoints-$damage;
         return $newHealth;
     }

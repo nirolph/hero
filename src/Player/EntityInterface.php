@@ -18,6 +18,7 @@ interface EntityInterface extends OffensiveInterface, SkilledInterface,
     DefensiveInterface, LuckyInterface, ChanceAwareInterface,
     StatsAwareInterface, OptimalSkillSelectorAwareInterface
 {
+    public function isDead();
     public function getName();
     public function setName($name);
 }

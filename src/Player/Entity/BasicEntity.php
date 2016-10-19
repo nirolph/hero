@@ -8,15 +8,15 @@
 
 namespace Player\Entity;
 
-use Match\Broadcaster\BroadcasterAwareInterface;
-use Match\Broadcaster\BroadcasterInterface;
+use Skill\SkillCollection;
+use Strike\StrikeInterface;
 use Player\EntityInterface;
+use Strike\StrikeCollection;
 use Player\Stats\StatsInterface;
 use Skill\Service\Chance\ChanceInterface;
+use Match\Broadcaster\BroadcasterInterface;
+use Match\Broadcaster\BroadcasterAwareInterface;
 use Skill\Service\OptimalSkillSelectorInterface;
-use Skill\SkillCollection;
-use Strike\StrikeCollection;
-use Strike\StrikeInterface;
 
 abstract class BasicEntity implements EntityInterface, BroadcasterAwareInterface
 {
@@ -31,7 +31,6 @@ abstract class BasicEntity implements EntityInterface, BroadcasterAwareInterface
         if (empty($this->getOffenceSkills())) {
             throw new \Exception('No attack skills found!');
         }
-        $this->getBroadcaster()->broadcast(sprintf('%s attacks!', $this->getName()));
         $optimalSkill = $this->getOptimalSkillSelector()
             ->determineOptimalOffenseSkill($this->getOffenceSkills());
         return $optimalSkill->attack();
@@ -39,7 +38,6 @@ abstract class BasicEntity implements EntityInterface, BroadcasterAwareInterface
 
     public function defend(StrikeCollection $strikes)
     {
-        $this->getBroadcaster()->broadcast(sprintf('%s tries to defend!', $this->getName()));
         foreach ($strikes as $strike) {
             $this->handleStrike($strike);
         }
@@ -125,5 +123,8 @@ abstract class BasicEntity implements EntityInterface, BroadcasterAwareInterface
         return $this->broadcaster;
     }
 
-
+    public function isDead()
+    {
+        return ($this->getStats()->getHealth() <= 0);
+    }
 }

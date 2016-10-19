@@ -76,11 +76,11 @@ class BeastFactory implements FactoryInterface
         return $stats;
     }
 
-    private function getSkills(Beast $orderus)
+    private function getSkills(Beast $beast)
     {
         $skillCollection = new SkillCollection();
-        $attackSkill = AttackSkill::attachTo($orderus);
-        $defendSkill = DefendSkill::attachTo($orderus);
+        $attackSkill = AttackSkill::attachTo($beast);
+        $defendSkill = DefendSkill::attachTo($beast);
         $attackSkill->setBroadcaster(new MessageBroadcaster());
         $defendSkill->setBroadcaster(new MessageBroadcaster());
         $skillCollection->add($attackSkill);

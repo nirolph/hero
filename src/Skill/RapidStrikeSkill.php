@@ -12,15 +12,22 @@ namespace Skill;
 use Match\Broadcaster\BroadcasterAwareInterface;
 use Match\Broadcaster\BroadcasterInterface;
 use Player\EntityInterface;
+use Skill\Service\Chance\ChanceAwareInterface;
+use Skill\Service\Chance\ChanceInterface;
 use Strike\BasicStrike;
 use Strike\StrikeCollection;
 
-class RapidStrikeSkill implements OffenceSkillInterface, BroadcasterAwareInterface
+class RapidStrikeSkill implements OffenceSkillInterface,
+    BroadcasterAwareInterface, ChanceAwareInterface
 {
+    const SKILL_NAME = 'RAPID STRIKE';
+    const LUCK_FACTOR = 10;
+
     private $attacker;
     private $effectiveness = 0;
     private $isEffective = false;
     private $broadcaster;
+    private $chance;
 
     public static function attachTo(EntityInterface $entity)
     {
@@ -34,10 +41,10 @@ class RapidStrikeSkill implements OffenceSkillInterface, BroadcasterAwareInterfa
 
     public function attack()
     {
-        $strikeCollection = new StrikeCollection();
         if ($this->isEffective) {
+            $strikeCollection = new StrikeCollection();
             $this->getBroadcaster()->broadcast(
-                sprintf('%s uses Rapid Strike. He strikes twice.', $this->attacker->getName())
+                sprintf('%s uses %s. He strikes twice.', $this->attacker->getName(), self::SKILL_NAME)
             );
             $power = $this->attacker->getStats()->getStrength();
             $strike = BasicStrike::create($power);
@@ -60,7 +67,7 @@ class RapidStrikeSkill implements OffenceSkillInterface, BroadcasterAwareInterfa
 
     private function isLucky()
     {
-        return (mt_rand(1,100) <= 10);
+        return $this->getChance()->amILucky(self::LUCK_FACTOR);
     }
 
     private function reset()
@@ -78,4 +85,15 @@ class RapidStrikeSkill implements OffenceSkillInterface, BroadcasterAwareInterfa
     {
         return $this->broadcaster;
     }
+
+    public function setChance(ChanceInterface $chance)
+    {
+        $this->chance = $chance;
+    }
+
+    public function getChance()
+    {
+        return $this->chance;
+    }
+
 }

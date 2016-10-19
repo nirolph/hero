@@ -9,8 +9,6 @@
 namespace Skill\Service\Chance;
 
 
-use Player\EntityInterface;
-
 class LuckyService implements ChanceInterface
 {
     public function amILucky($chance)

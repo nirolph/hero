@@ -90,7 +90,9 @@ class OrderusHeroFactory implements FactoryInterface
         $attackSkill->setBroadcaster(new MessageBroadcaster());
         $defendSkill->setBroadcaster(new MessageBroadcaster());
         $rapidStrikeSkill->setBroadcaster(new MessageBroadcaster());
+        $rapidStrikeSkill->setChance(new LuckyService());
         $magicShieldSkill->setBroadcaster(new MessageBroadcaster());
+        $magicShieldSkill->setChance(new LuckyService());
 
         $skillCollection->add($attackSkill);
         $skillCollection->add($defendSkill);

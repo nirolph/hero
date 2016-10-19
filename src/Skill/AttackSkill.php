@@ -17,6 +17,8 @@ use Strike\StrikeCollection;
 
 class AttackSkill implements OffenceSkillInterface, BroadcasterAwareInterface
 {
+    const SKILL_NAME = 'ATTACK';
+
     private $attacker;
     private $broadcaster;
 
@@ -35,7 +37,7 @@ class AttackSkill implements OffenceSkillInterface, BroadcasterAwareInterface
         $strikeCollection = new StrikeCollection();
         $power = $this->attacker->getStats()->getStrength();
         $this->getBroadcaster()->broadcast(
-            sprintf('%s strikes with %s power', $this->attacker->getName(), $power)
+            sprintf('%s uses %s', $this->attacker->getName(), self::SKILL_NAME)
         );
         $strike = BasicStrike::create($power);
         $strikeCollection->add($strike);
