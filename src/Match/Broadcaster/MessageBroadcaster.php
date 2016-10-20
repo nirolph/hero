@@ -22,7 +22,6 @@ class MessageBroadcaster implements BroadcasterInterface
 
     public function broadcast($message)
     {
-        dump($message);
         foreach ($this->observers as $observer) {
             $observer->listen($message);
         }

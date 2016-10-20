@@ -15,4 +15,5 @@ interface ObserverInterface
 {
     public function listen($message);
     public function subscribe(BroadcasterInterface $subject);
+    public function outputRoundStats();
 }

@@ -9,7 +9,7 @@
 namespace Player\Factory;
 
 
-use Match\Broadcaster\MessageBroadcaster;
+use Match\Broadcaster\BroadcasterInterface;
 use Player\Entity\Beast;
 use Player\Stats\PlayerStats;
 use Skill\AttackSkill;
@@ -50,11 +50,13 @@ class BeastFactory implements FactoryInterface
     const LUCK_MIN        = 25;
     const LUCK_MAX        = 40;
 
+    private $broadcaster;
+
     public function create()
     {
         $stats = $this->getPlayerStats();
         $beast = new Beast();
-        $beast->setBroadcaster(new MessageBroadcaster());
+        $beast->setBroadcaster($this->broadcaster);
         $beast->setName('Hellfire');
         $beast->setStats($stats);
         $beast->setOptimalSkillSelector(new OptimalSkillSelectorService());
@@ -81,11 +83,17 @@ class BeastFactory implements FactoryInterface
         $skillCollection = new SkillCollection();
         $attackSkill = AttackSkill::attachTo($beast);
         $defendSkill = DefendSkill::attachTo($beast);
-        $attackSkill->setBroadcaster(new MessageBroadcaster());
-        $defendSkill->setBroadcaster(new MessageBroadcaster());
+        $attackSkill->setBroadcaster($this->broadcaster);
+        $defendSkill->setBroadcaster($this->broadcaster);
         $skillCollection->add($attackSkill);
         $skillCollection->add($defendSkill);
         return $skillCollection;
     }
+
+    public function addBroadcaster(BroadcasterInterface $broadcaster)
+    {
+        $this->broadcaster = $broadcaster;
+    }
+
 
 }

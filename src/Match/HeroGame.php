@@ -9,6 +9,10 @@
 namespace Match;
 
 
+use Match\Broadcaster\MessageBroadcaster;
+use Match\Observer\JsonRenderer;
+use Match\Observer\MatchObserver;
+use Match\Observer\SymfonyDumpRenderer;
 use Player\EntityInterface;
 
 class HeroGame implements GameEngineInterface
@@ -19,24 +23,65 @@ class HeroGame implements GameEngineInterface
     private $beast;
     private $round = 1;
     private $heroAttacks = null;
+    private $matchObserver;
+    private $messageBroadcaster;
+
 
     public function run()
     {
         $this->setup();
+        $this->outputPlayersStats();
 
         do {
-            dump(sprintf('---------- ROUND %s ----------', $this->round));
+            $this->messageBroadcaster->broadcast(
+                sprintf('---------- Round %s ----------', $this->round)
+            );
+
             $attacker = $this->getAttacker();
             $defender = $this->getDefender();
             $this->engage($attacker, $defender);
             if ($defender->isDead()) {
-                dump(sprintf('We have a victor! %s has slain %s.', $attacker->getName(), $defender->getName()));
+                $this->messageBroadcaster->broadcast(
+                    sprintf('We have a victor! %s has slain %s.', $attacker->getName(), $defender->getName())
+                );
+                $this->printStats();
                 return;
             }
+
+            $this->messageBroadcaster->broadcast(
+                sprintf('%s HP: %s', $this->hero->getName(), $this->hero->getStats()->getHealth())
+            );
+
+            $this->messageBroadcaster->broadcast(
+                sprintf('%s HP: %s', $this->beast->getName(), $this->beast->getStats()->getHealth())
+            );
+
             $this->printStats();
             $this->endTurn();
         } while ($this->round <= self::MAX_ROUNDS);
         $this->determineVictor();
+        $this->printStats();
+    }
+
+    private function outputPlayersStats()
+    {
+        $this->messageBroadcaster->broadcast(sprintf('Name: %s', $this->hero->getName()));
+        $this->messageBroadcaster->broadcast(sprintf('Health: %s', $this->hero->getStats()->getHealth()));
+        $this->messageBroadcaster->broadcast(sprintf('Strength: %s', $this->hero->getStats()->getStrength()));
+        $this->messageBroadcaster->broadcast(sprintf('Defence: %s', $this->hero->getStats()->getDefence()));
+        $this->messageBroadcaster->broadcast(sprintf('Speed: %s', $this->hero->getStats()->getSpeed()));
+        $this->messageBroadcaster->broadcast(sprintf('Luck: %s', $this->hero->getStats()->getLuck()));
+
+        $this->printStats();
+
+        $this->messageBroadcaster->broadcast(sprintf('Name: %s', $this->beast->getName()));
+        $this->messageBroadcaster->broadcast(sprintf('Health: %s', $this->beast->getStats()->getHealth()));
+        $this->messageBroadcaster->broadcast(sprintf('Strength: %s', $this->beast->getStats()->getStrength()));
+        $this->messageBroadcaster->broadcast(sprintf('Defence: %s', $this->beast->getStats()->getDefence()));
+        $this->messageBroadcaster->broadcast(sprintf('Speed: %s', $this->beast->getStats()->getSpeed()));
+        $this->messageBroadcaster->broadcast(sprintf('Luck: %s', $this->beast->getStats()->getLuck()));
+
+        $this->printStats();
     }
 
     private function engage(EntityInterface $attacker, EntityInterface $defender)
@@ -46,6 +91,10 @@ class HeroGame implements GameEngineInterface
 
     private function setup()
     {
+        $this->messageBroadcaster = new MessageBroadcaster();
+        $this->matchObserver = new MatchObserver(new SymfonyDumpRenderer());
+        $this->matchObserver->subscribe($this->messageBroadcaster);
+
         $this->spawnPlayers();
         $this->decideWhoGetsFirstBlood();
     }
@@ -53,7 +102,9 @@ class HeroGame implements GameEngineInterface
     private function spawnPlayers()
     {
         $heroFactory = new \Player\Factory\OrderusHeroFactory();
+        $heroFactory->addBroadcaster($this->messageBroadcaster);
         $beastFactory = new \Player\Factory\BeastFactory();
+        $beastFactory->addBroadcaster($this->messageBroadcaster);
 
         $this->hero = $heroFactory->create();
         $this->beast = $beastFactory->create();
@@ -123,17 +174,22 @@ class HeroGame implements GameEngineInterface
         $beastHealth = $this->beast->getStats()->getHealth();
 
         if ($heroHealth > $beastHealth) {
-            dump(sprintf('%s is the victor!', $this->hero->getName()));
+            $this->messageBroadcaster->broadcast(
+                sprintf('%s is the victor!', $this->hero->getName())
+            );
         } elseif ($heroHealth < $beastHealth) {
-            dump(sprintf('%s is the victor!', $this->beast->getName()));
+            $this->messageBroadcaster->broadcast(
+                sprintf('%s is the victor!', $this->beast->getName())
+            );
         } else {
-            dump('It\'s a draw');
+            $this->messageBroadcaster->broadcast(
+                sprintf('It\'s a draw')
+            );
         }
     }
 
     private function printStats()
     {
-        dump(sprintf('Orderus HP: %s', $this->hero->getStats()->getHealth()));
-        dump(sprintf('Beast HP: %s', $this->beast->getStats()->getHealth()));
+        $this->matchObserver->outputRoundStats();
     }
 }

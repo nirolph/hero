@@ -9,6 +9,8 @@
 namespace Player\Factory;
 
 
+use Match\Broadcaster\BroadcasterInterface;
+
 interface FactoryInterface
 {
     /**
@@ -16,4 +18,6 @@ interface FactoryInterface
      * @return mixed
      */
     public function create();
+
+    public function addBroadcaster(BroadcasterInterface $broadcaster);
 }

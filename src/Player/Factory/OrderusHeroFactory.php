@@ -19,6 +19,7 @@ use Skill\RapidStrikeSkill;
 use Skill\Service\Chance\LuckyService;
 use Skill\Service\OptimalSkillSelectorService;
 use Skill\SkillCollection;
+use Match\Broadcaster\BroadcasterInterface;
 
 class OrderusHeroFactory implements FactoryInterface
 {
@@ -52,6 +53,8 @@ class OrderusHeroFactory implements FactoryInterface
     const LUCK_MIN        = 10;
     const LUCK_MAX        = 30;
 
+    private $broadcaster;
+
     public function create()
     {
         $stats = $this->getPlayerStats();
@@ -62,7 +65,7 @@ class OrderusHeroFactory implements FactoryInterface
         $orderus->setChance(new LuckyService());
         $skills = $this->getSkills($orderus);
         $orderus->setSkills($skills);
-        $orderus->setBroadcaster(new MessageBroadcaster());
+        $orderus->setBroadcaster($this->broadcaster);
         return $orderus;
 
     }
@@ -87,11 +90,11 @@ class OrderusHeroFactory implements FactoryInterface
         $rapidStrikeSkill = RapidStrikeSkill::attachTo($orderus);
         $magicShieldSkill = MagicShieldSkill::attachTo($orderus);
 
-        $attackSkill->setBroadcaster(new MessageBroadcaster());
-        $defendSkill->setBroadcaster(new MessageBroadcaster());
-        $rapidStrikeSkill->setBroadcaster(new MessageBroadcaster());
+        $attackSkill->setBroadcaster($this->broadcaster);
+        $defendSkill->setBroadcaster($this->broadcaster);
+        $rapidStrikeSkill->setBroadcaster($this->broadcaster);
         $rapidStrikeSkill->setChance(new LuckyService());
-        $magicShieldSkill->setBroadcaster(new MessageBroadcaster());
+        $magicShieldSkill->setBroadcaster($this->broadcaster);
         $magicShieldSkill->setChance(new LuckyService());
 
         $skillCollection->add($attackSkill);
@@ -99,6 +102,11 @@ class OrderusHeroFactory implements FactoryInterface
         $skillCollection->add($rapidStrikeSkill);
         $skillCollection->add($magicShieldSkill);
         return $skillCollection;
+    }
+
+    public function addBroadcaster(BroadcasterInterface $broadcaster)
+    {
+        $this->broadcaster = $broadcaster;
     }
 
 }

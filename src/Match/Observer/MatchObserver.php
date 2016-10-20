@@ -14,6 +14,16 @@ use Match\Broadcaster\BroadcasterInterface;
 class MatchObserver implements ObserverInterface
 {
     private $messages = [];
+    private $renderer;
+
+    /**
+     * MatchObserver constructor.
+     * @param RendererInterface $renderer
+     */
+    public function __construct(RendererInterface $renderer)
+    {
+        $this->renderer = $renderer;
+    }
 
     public function listen($message)
     {
@@ -24,4 +34,11 @@ class MatchObserver implements ObserverInterface
     {
         $subject->addObserver($this);
     }
+
+    public function outputRoundStats()
+    {
+        $this->renderer->render($this->messages);
+        $this->messages = [];
+    }
+
 }
