@@ -4,10 +4,12 @@
       "Strike\\": "src/Strike/",
       "Player\\": "src/Player/",
       "Skill\\": "src/Skill/",
-      "Match\\": "src/Match/"
+      "Match\\": "src/Match/",
+      "Tests\\": "tests/"
     }
   },
   "require": {
-    "symfony/var-dumper": "^3.1"
+    "symfony/var-dumper": "^3.1",
+    "phpunit/phpunit": "^5.6"
   }
 }

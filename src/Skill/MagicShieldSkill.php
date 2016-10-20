@@ -69,7 +69,7 @@ class MagicShieldSkill implements DefenceSkillInterface, BroadcasterAwareInterfa
         );
     }
 
-    private function calculateHealthAfterStrike($strikePower, $healthPoints, $defencePoints)
+    private function calculateHealthAfterStrike($strikePower, $healthPoints)
     {
         if ($this->isLucky()) {
             $damage = $this->calculateDamage($strikePower);

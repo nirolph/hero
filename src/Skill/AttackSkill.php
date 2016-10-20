@@ -35,7 +35,7 @@ class AttackSkill implements OffenceSkillInterface, BroadcasterAwareInterface
     public function attack()
     {
         $strikeCollection = new StrikeCollection();
-        $power = $this->attacker->getStats()->getStrength();
+        $power = $this->getOffenseEffectiveness();
         $this->getBroadcaster()->broadcast(
             sprintf('%s uses %s', $this->attacker->getName(), self::SKILL_NAME)
         );

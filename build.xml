@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="HeroGame" basedir="." default="tests">
+    <target name="tests">
+        <echo message="Running unit tests with PHPUnit" />
+        <exec executable="phpunit" failonerror="true">
+            <arg value="--bootstrap"/>
+            <arg value="vendor/autoload.php"/>
+            <arg value="tests/"/>
+            <arg value="--colors=always"/>
+        </exec>
+    </target>
+</project>
