@@ -18,6 +18,11 @@ use Skill\Service\Chance\LuckyService;
 use Skill\Service\OptimalSkillSelectorService;
 use Skill\SkillCollection;
 
+/**
+ * Beast factory (also called hell)
+ * Class BeastFactory
+ * @package Player\Factory
+ */
 class BeastFactory implements FactoryInterface
 {
     /**
@@ -50,8 +55,16 @@ class BeastFactory implements FactoryInterface
     const LUCK_MIN        = 25;
     const LUCK_MAX        = 40;
 
+    /**
+     * The message broadcaster
+     * @var BroadcasterInterface
+     */
     private $broadcaster;
 
+    /**
+     * Spawn the beast named Hellfire
+     * @return Beast
+     */
     public function create()
     {
         $stats = $this->getPlayerStats();
@@ -67,6 +80,10 @@ class BeastFactory implements FactoryInterface
 
     }
 
+    /**
+     * Get beast stats
+     * @return PlayerStats
+     */
     private function getPlayerStats()
     {
         $stats = new PlayerStats();
@@ -78,6 +95,12 @@ class BeastFactory implements FactoryInterface
         return $stats;
     }
 
+    /**
+     * Get best skills
+     * @param Beast $beast
+     * @return SkillCollection
+     * @throws \Exception
+     */
     private function getSkills(Beast $beast)
     {
         $skillCollection = new SkillCollection();
@@ -90,6 +113,10 @@ class BeastFactory implements FactoryInterface
         return $skillCollection;
     }
 
+    /**
+     * Add message broadcaster
+     * @param BroadcasterInterface $broadcaster
+     */
     public function addBroadcaster(BroadcasterInterface $broadcaster)
     {
         $this->broadcaster = $broadcaster;

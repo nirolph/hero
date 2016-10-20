@@ -8,8 +8,16 @@
 
 namespace Match\Observer;
 
-
+/**
+ * Interface RendererInterface
+ * @package Match\Observer
+ */
 interface RendererInterface
 {
+    /**
+     * Render messages
+     * @param array $output
+     * @return mixed
+     */
     public function render(array $output);
 }

@@ -8,8 +8,15 @@
 
 namespace Match;
 
-
+/**
+ * Interface GameEngineInterface
+ * @package Match
+ */
 interface GameEngineInterface
 {
+    /**
+     * Run the game
+     * @return mixed
+     */
     public function run();
 }

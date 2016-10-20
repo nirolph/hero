@@ -9,24 +9,65 @@
 namespace Match;
 
 
+use Match\Broadcaster\BroadcasterInterface;
 use Match\Broadcaster\MessageBroadcaster;
 use Match\Observer\JsonRenderer;
 use Match\Observer\MatchObserver;
+use Match\Observer\ObserverInterface;
 use Match\Observer\SymfonyDumpRenderer;
 use Player\EntityInterface;
 
+/**
+ * Orderus fight a best named Hellfire game
+ * Class HeroGame
+ * @package Match
+ */
 class HeroGame implements GameEngineInterface
 {
+    /**
+     * Maximum number of rounds after which the winne is the player with most health left
+     */
     const MAX_ROUNDS = 20;
 
+    /**
+     * The hero
+     * @var EntityInterface
+     */
     private $hero;
+
+    /**
+     * The beast
+     * @var EntityInterface
+     */
     private $beast;
+
+    /**
+     * Round count
+     * @var int
+     */
     private $round = 1;
+
+    /**
+     * Is it the hero's turn to attack?
+     * @var null
+     */
     private $heroAttacks = null;
+
+    /**
+     * The match observer
+     * @var ObserverInterface
+     */
     private $matchObserver;
+
+    /**
+     * The message broadcaster
+     * @var BroadcasterInterface
+     */
     private $messageBroadcaster;
 
-
+    /**
+     * Let the game begin
+     */
     public function run()
     {
         $this->setup();
@@ -59,10 +100,14 @@ class HeroGame implements GameEngineInterface
             $this->printStats();
             $this->endTurn();
         } while ($this->round <= self::MAX_ROUNDS);
+
         $this->determineVictor();
         $this->printStats();
     }
 
+    /**
+     *  Output player stats before game starts
+     */
     private function outputPlayersStats()
     {
         $this->messageBroadcaster->broadcast(sprintf('Name: %s', $this->hero->getName()));
@@ -84,11 +129,20 @@ class HeroGame implements GameEngineInterface
         $this->printStats();
     }
 
+    /**
+     * Engage in battle
+     * @param EntityInterface $attacker
+     * @param EntityInterface $defender
+     */
     private function engage(EntityInterface $attacker, EntityInterface $defender)
     {
         $defender->defend($attacker->attack());
     }
 
+    /**
+     * Initial game setup
+     * @throws \Exception
+     */
     private function setup()
     {
         $this->messageBroadcaster = new MessageBroadcaster();
@@ -99,6 +153,9 @@ class HeroGame implements GameEngineInterface
         $this->decideWhoGetsFirstBlood();
     }
 
+    /**
+     * Spawn the players
+     */
     private function spawnPlayers()
     {
         $heroFactory = new \Player\Factory\OrderusHeroFactory();
@@ -110,6 +167,10 @@ class HeroGame implements GameEngineInterface
         $this->beast = $beastFactory->create();
     }
 
+    /**
+     * Decide who draws first boold (who goes first)
+     * @throws \Exception
+     */
     private function decideWhoGetsFirstBlood()
     {
         if (!$this->decideBySpeed()) {
@@ -120,6 +181,10 @@ class HeroGame implements GameEngineInterface
         }
     }
 
+    /**
+     * Decide who has higher speed
+     * @return bool
+     */
     private function decideBySpeed()
     {
         $heroSpeed = $this->hero->getStats()->getSpeed();
@@ -136,6 +201,10 @@ class HeroGame implements GameEngineInterface
         return false;
     }
 
+    /**
+     * Decide who has better luck
+     * @return bool
+     */
     private function decideByLuck()
     {
         $heroLuck = $this->hero->getStats()->getLuck();
@@ -152,22 +221,36 @@ class HeroGame implements GameEngineInterface
         return false;
     }
 
+    /**
+     * Get the current round's attacker
+     * @return EntityInterface
+     */
     private function getAttacker()
     {
         return $this->heroAttacks ? $this->hero : $this->beast;
     }
 
+    /**
+     * Get the current round's defender
+     * @return EntityInterface
+     */
     private function getDefender()
     {
         return $this->heroAttacks ? $this->beast : $this->hero;
     }
 
+    /**
+     * End the round
+     */
     private function endTurn()
     {
         $this->heroAttacks = !$this->heroAttacks;
         ++$this->round;
     }
 
+    /**
+     * Determine who is victorious in battle
+     */
     private function determineVictor()
     {
         $heroHealth = $this->hero->getStats()->getHealth();
@@ -188,6 +271,9 @@ class HeroGame implements GameEngineInterface
         }
     }
 
+    /**
+     * Output current round statistics
+     */
     private function printStats()
     {
         $this->matchObserver->outputRoundStats();

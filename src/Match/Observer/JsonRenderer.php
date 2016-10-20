@@ -8,9 +8,17 @@
 
 namespace Match\Observer;
 
-
+/**
+ * Output messages in json format
+ * Class JsonRenderer
+ * @package Match\Observer
+ */
 class JsonRenderer implements RendererInterface
 {
+    /**
+     * Render messages
+     * @param array $output
+     */
     public function render(array $output)
     {
         echo "<pre>";

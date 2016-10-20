@@ -11,6 +11,10 @@ namespace Player;
 
 use Strike\StrikeCollection;
 
+/**
+ * Interface OffensiveInterface
+ * @package Player
+ */
 interface OffensiveInterface
 {
     /**

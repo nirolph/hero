@@ -8,7 +8,10 @@
 
 namespace Player;
 
-
+/**
+ * Interface LuckyInterface
+ * @package Player
+ */
 interface LuckyInterface
 {
     /**

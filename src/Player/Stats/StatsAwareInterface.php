@@ -8,9 +8,22 @@
 
 namespace Player\Stats;
 
-
+/**
+ * Interface StatsAwareInterface
+ * @package Player\Stats
+ */
 interface StatsAwareInterface
 {
+    /**
+     * Get player stats
+     * @return mixed
+     */
     public function getStats();
+
+    /**
+     * Set player stats
+     * @param StatsInterface $stats
+     * @return mixed
+     */
     public function setStats(StatsInterface $stats);
 }

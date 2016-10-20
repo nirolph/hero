@@ -8,10 +8,15 @@
 
 namespace Skill\Service\Chance;
 
-
-use Player\EntityInterface;
-
+/**
+ * Interface ChanceInterface
+ * @package Skill\Service\Chance
+ */
 interface ChanceInterface
 {
+    /**
+     * @param $chance
+     * @return bool
+     */
     public function amILucky($chance);
 }

@@ -10,6 +10,11 @@ namespace Player;
 
 use Strike\StrikeCollection;
 
+/**
+ * Ability to defend against a strike
+ * Interface DefensiveInterface
+ * @package Player
+ */
 interface DefensiveInterface
 {
     /**

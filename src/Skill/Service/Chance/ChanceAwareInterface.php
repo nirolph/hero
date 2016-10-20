@@ -8,9 +8,19 @@
 
 namespace Skill\Service\Chance;
 
-
+/**
+ * Interface ChanceAwareInterface
+ * @package Skill\Service\Chance
+ */
 interface ChanceAwareInterface
 {
+    /**
+     * @param ChanceInterface $chance
+     */
     public function setChance(ChanceInterface $chance);
+
+    /**
+     * @return ChanceInterface
+     */
     public function getChance();
 }

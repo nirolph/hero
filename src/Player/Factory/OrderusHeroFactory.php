@@ -21,6 +21,11 @@ use Skill\Service\OptimalSkillSelectorService;
 use Skill\SkillCollection;
 use Match\Broadcaster\BroadcasterInterface;
 
+/**
+ * Hero factory
+ * Class OrderusHeroFactory
+ * @package Player\Factory
+ */
 class OrderusHeroFactory implements FactoryInterface
 {
     /**
@@ -53,8 +58,16 @@ class OrderusHeroFactory implements FactoryInterface
     const LUCK_MIN        = 10;
     const LUCK_MAX        = 30;
 
+    /**
+     * Message broadcaster
+     * @var BroadcasterInterface
+     */
     private $broadcaster;
 
+    /**
+     * Spawn the hero called Orderus
+     * @return Hero
+     */
     public function create()
     {
         $stats = $this->getPlayerStats();
@@ -70,6 +83,10 @@ class OrderusHeroFactory implements FactoryInterface
 
     }
 
+    /**
+     * Get hero's stats
+     * @return PlayerStats
+     */
     private function getPlayerStats()
     {
         $stats = new PlayerStats();
@@ -81,6 +98,12 @@ class OrderusHeroFactory implements FactoryInterface
         return $stats;
     }
 
+    /**
+     * Get hero's skills
+     * @param Hero $orderus
+     * @return SkillCollection
+     * @throws \Exception
+     */
     private function getSkills(Hero $orderus)
     {
         $skillCollection = new SkillCollection();
@@ -104,6 +127,10 @@ class OrderusHeroFactory implements FactoryInterface
         return $skillCollection;
     }
 
+    /**
+     * Get message broadcaster
+     * @param BroadcasterInterface $broadcaster
+     */
     public function addBroadcaster(BroadcasterInterface $broadcaster)
     {
         $this->broadcaster = $broadcaster;

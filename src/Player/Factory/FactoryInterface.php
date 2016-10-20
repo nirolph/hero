@@ -11,6 +11,11 @@ namespace Player\Factory;
 
 use Match\Broadcaster\BroadcasterInterface;
 
+/**
+ * Player factory
+ * Interface FactoryInterface
+ * @package Player\Factory
+ */
 interface FactoryInterface
 {
     /**
@@ -19,5 +24,10 @@ interface FactoryInterface
      */
     public function create();
 
+    /**
+     * Add message broadcaster
+     * @param BroadcasterInterface $broadcaster
+     * @return mixed
+     */
     public function addBroadcaster(BroadcasterInterface $broadcaster);
 }

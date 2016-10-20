@@ -8,18 +8,31 @@
 
 namespace Player\Entity;
 
-
-use Player\EntityInterface;
-
+/**
+ * Class Hero
+ * @package Player\Entity
+ */
 class Hero extends BasicEntity
 {
+    /**
+     * Hero's name
+     * @var string
+     */
     private $name = 'Unnamed hero';
 
+    /**
+     * Set hero's name
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
 
+    /**
+     * Get hero's name
+     * @param $name
+     */
     public function setName($name)
     {
         $this->name = $name;

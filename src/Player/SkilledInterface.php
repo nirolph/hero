@@ -11,6 +11,11 @@ namespace Player;
 
 use Skill\SkillCollection;
 
+/**
+ * Ability to own skills
+ * Interface SkilledInterface
+ * @package Player
+ */
 interface SkilledInterface
 {
     public function setSkills(SkillCollection $skills);

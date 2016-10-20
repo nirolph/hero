@@ -8,9 +8,17 @@
 
 namespace Skill\Service\Chance;
 
-
+/**
+ * Percentage implementation
+ * Class LuckyService
+ * @package Skill\Service\Chance
+ */
 class LuckyService implements ChanceInterface
 {
+    /**
+     * @param $chance
+     * @return bool
+     */
     public function amILucky($chance)
     {
         return (mt_rand(1,100) <= $chance);

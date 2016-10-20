@@ -9,11 +9,21 @@
 namespace Skill\Service;
 
 
+use Skill\DefenceSkillInterface;
+use Skill\OffenceSkillInterface;
 use Skill\SkillCollection;
 use Strike\StrikeInterface;
 
+/**
+ * Class OptimalSkillSelectorService
+ * @package Skill\Service
+ */
 class OptimalSkillSelectorService implements OptimalSkillSelectorInterface
 {
+    /**
+     * @param SkillCollection $skills
+     * @return OffenceSkillInterface
+     */
     public function determineOptimalOffenseSkill(SkillCollection $skills)
     {
         $attackRank = [];
@@ -25,6 +35,11 @@ class OptimalSkillSelectorService implements OptimalSkillSelectorInterface
         return reset($attackRank);
     }
 
+    /**
+     * @param SkillCollection $skills
+     * @param StrikeInterface $strike
+     * @return DefenceSkillInterface
+     */
     public function determineOptimalDefenceSkill(SkillCollection $skills, StrikeInterface $strike)
     {
         $defendRank = [];

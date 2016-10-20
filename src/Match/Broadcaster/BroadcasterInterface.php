@@ -11,8 +11,23 @@ namespace Match\Broadcaster;
 
 use Match\Observer\ObserverInterface;
 
+/**
+ * A means of broadcasting a message
+ *
+ * Interface BroadcasterInterface
+ * @package Match\Broadcaster
+ */
 interface BroadcasterInterface
 {
+    /**
+     * @param ObserverInterface $observer
+     * @return mixed
+     */
     public function addObserver(ObserverInterface $observer);
+
+    /**
+     * Broadcast a message
+     * @param $message
+     */
     public function broadcast($message);
 }

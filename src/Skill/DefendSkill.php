@@ -14,24 +14,53 @@ use Match\Broadcaster\BroadcasterInterface;
 use Strike\StrikeInterface;
 use Player\EntityInterface;
 
+/**
+ * Class DefendSkill
+ * @package Skill
+ */
 class DefendSkill implements DefenceSkillInterface, BroadcasterAwareInterface
 {
+    /**
+     * Skill name
+     */
     const SKILL_NAME = 'DEFEND';
 
+    /**
+     * @var EntityInterface
+     */
     private $defender;
+
+    /**
+     * @var BroadcasterInterface
+     */
     private $broadcaster;
+
+    /**
+     * @var bool
+     */
     private $isEffective = false;
 
-    public static function attachTo(EntityInterface $entity)
-    {
-        return new self($entity);
-    }
-
+    /**
+     * DefendSkill constructor.
+     * @param EntityInterface $entity
+     */
     public function __construct(EntityInterface $entity)
     {
         $this->defender = $entity;
     }
 
+    /**
+     * @param EntityInterface $entity
+     * @return DefendSkill
+     */
+    public static function attachTo(EntityInterface $entity)
+    {
+        return new self($entity);
+    }
+
+    /**
+     * @param StrikeInterface $strike
+     */
     public function defend(StrikeInterface $strike)
     {
         $newHealth = $this->calculateHealthAfterStrike(
@@ -52,6 +81,10 @@ class DefendSkill implements DefenceSkillInterface, BroadcasterAwareInterface
         $this->defender->getStats()->setHealth($newHealth);
     }
 
+    /**
+     * @param StrikeInterface $strike
+     * @return int
+     */
     public function getDefenceEffectiveness(StrikeInterface $strike)
     {
         $this->isEffective = true;
@@ -62,6 +95,12 @@ class DefendSkill implements DefenceSkillInterface, BroadcasterAwareInterface
         );
     }
 
+    /**
+     * @param $strikePower
+     * @param $healthPoints
+     * @param $defencePoints
+     * @return int
+     */
     private function calculateHealthAfterStrike($strikePower, $healthPoints, $defencePoints)
     {
         $damage = $strikePower - $defencePoints;
@@ -69,11 +108,17 @@ class DefendSkill implements DefenceSkillInterface, BroadcasterAwareInterface
         return $newHealth;
     }
 
+    /**
+     * @param BroadcasterInterface $broadcaster
+     */
     public function setBroadcaster(BroadcasterInterface $broadcaster)
     {
         $this->broadcaster = $broadcaster;
     }
 
+    /**
+     * @return BroadcasterInterface
+     */
     public function getBroadcaster()
     {
         return $this->broadcaster;

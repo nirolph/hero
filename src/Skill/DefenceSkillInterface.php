@@ -9,10 +9,22 @@
 namespace Skill;
 
 use Strike\StrikeInterface;
-use Player\EntityInterface;
 
+/**
+ * Interface DefenceSkillInterface
+ * @package Skill
+ */
 interface DefenceSkillInterface extends SkillInterface
 {
+    /**
+     * @param StrikeInterface $strike
+     * @return mixed
+     */
     public function defend(StrikeInterface $strike);
+
+    /**
+     * @param StrikeInterface $strike
+     * @return mixed
+     */
     public function getDefenceEffectiveness(StrikeInterface $strike);
 }

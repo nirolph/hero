@@ -8,9 +8,19 @@
 
 namespace Skill\Service;
 
-
+/**
+ * Interface OptimalSkillSelectorAwareInterface
+ * @package Skill\Service
+ */
 interface OptimalSkillSelectorAwareInterface
 {
+    /**
+     * @return OptimalSkillSelectorInterface
+     */
     public function getOptimalSkillSelector();
+
+    /**
+     * @param OptimalSkillSelectorInterface $selector
+     */
     public function setOptimalSkillSelector(OptimalSkillSelectorInterface $selector);
 }
